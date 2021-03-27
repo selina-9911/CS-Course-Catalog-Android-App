@@ -1,6 +1,8 @@
 package edu.illinois.cs.cs125.spring2021.mp.application;
 
 import android.app.Application;
+import android.util.Log;
+
 import edu.illinois.cs.cs125.spring2021.mp.network.Client;
 import edu.illinois.cs.cs125.spring2021.mp.network.Server;
 
@@ -24,6 +26,7 @@ public class CourseableApplication extends Application {
   @Override
   public final void onCreate() {
     super.onCreate();
+    Log.i("Startup","CourseableApplication onCreate");
 
     client = Client.start();
     new Thread(Server::start).start();

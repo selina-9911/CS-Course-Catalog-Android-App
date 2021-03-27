@@ -1,5 +1,7 @@
 package edu.illinois.cs.cs125.spring2021.mp.models;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 import java.util.Comparator;
@@ -127,7 +129,12 @@ public class Summary implements SortedListAdapter.ViewModel {
   /**
    * javadoc comment.
    */
-  public static final Comparator<Summary> COMPARATOR = (courseModel1, courseModel2) -> 0;
+  @SuppressWarnings("checkstyle:WhitespaceAfter")
+  public static final Comparator<Summary> COMPARATOR = (courseModel1, courseModel2) -> {
+    String firstCompare = courseModel1.department + " " + courseModel1.number + courseModel1.title;
+    String secondCompare = courseModel2.department + " " + courseModel2.number + courseModel2.title;
+    return firstCompare.compareTo(secondCompare);
+  };
 
   /**
    * javadoc comment.
