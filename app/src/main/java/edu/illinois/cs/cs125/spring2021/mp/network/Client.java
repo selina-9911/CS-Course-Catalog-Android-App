@@ -21,7 +21,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.Executors;
 
-
 /**
  * Course API client.
  *
@@ -73,7 +72,7 @@ public final class Client {
                 e.printStackTrace();
               }
             },
-            error -> e(TAG, error.toString()));
+            error -> Log.e(TAG, error.toString()));
     requestQueue.add(summaryRequest);
   }
 
@@ -120,7 +119,7 @@ public final class Client {
     try {
       serverURL = new URL(CourseableApplication.SERVER_URL);
     } catch (MalformedURLException e) {
-      e(TAG, "Bad server URL: " + CourseableApplication.SERVER_URL);
+      Log.e(TAG, "Bad server URL: " + CourseableApplication.SERVER_URL);
       return;
     }
 
@@ -138,7 +137,7 @@ public final class Client {
                   requestQueue.start();
                   break;
                 } catch (Exception e) {
-                  e(TAG, e.toString());
+                  Log.e(TAG, e.toString());
                 }
                 // If the connection fails, delay and then retry
                 try {

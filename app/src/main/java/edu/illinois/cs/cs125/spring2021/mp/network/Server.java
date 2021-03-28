@@ -1,7 +1,6 @@
 package edu.illinois.cs.cs125.spring2021.mp.network;
 
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;

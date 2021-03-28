@@ -1,9 +1,7 @@
 package edu.illinois.cs.cs125.spring2021.mp.models;
 
-
 import androidx.annotation.NonNull;
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -127,18 +125,20 @@ public class Summary implements SortedListAdapter.ViewModel {
     return equals(model);
   }
 
-  /**
-   * javadoc comment.
-   */
+  /** javadoc comment. */
   @SuppressWarnings("checkstyle:WhitespaceAfter")
-  public static final Comparator<Summary> COMPARATOR = (courseModel1, courseModel2) -> {
-    String firstCompare = courseModel1.department + " " + courseModel1.number + courseModel1.title;
-    String secondCompare = courseModel2.department + " " + courseModel2.number + courseModel2.title;
-    return firstCompare.compareTo(secondCompare);
-  };
+  public static final Comparator<Summary> COMPARATOR =
+      (courseModel1, courseModel2) -> {
+        String firstCompare =
+            courseModel1.department + " " + courseModel1.number + courseModel1.title;
+        String secondCompare =
+            courseModel2.department + " " + courseModel2.number + courseModel2.title;
+        return firstCompare.compareTo(secondCompare);
+      };
 
   /**
    * javadoc comment.
+   *
    * @return description
    * @param courses
    * @param text
@@ -146,7 +146,7 @@ public class Summary implements SortedListAdapter.ViewModel {
   public static List<Summary> filter(
       @NonNull final List<Summary> courses, @NonNull final String text) {
     List<Summary> courseList = new ArrayList<>();
-    for (Summary course: courses) {
+    for (Summary course : courses) {
       String thisCourse = course.department + " " + course.number + ": " + course.title;
       if (thisCourse.toLowerCase().contains(text.toLowerCase())) {
         courseList.add(course);

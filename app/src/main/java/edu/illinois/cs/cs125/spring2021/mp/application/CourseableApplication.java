@@ -2,7 +2,6 @@ package edu.illinois.cs.cs125.spring2021.mp.application;
 
 import android.app.Application;
 import android.util.Log;
-
 import edu.illinois.cs.cs125.spring2021.mp.network.Client;
 import edu.illinois.cs.cs125.spring2021.mp.network.Server;
 
