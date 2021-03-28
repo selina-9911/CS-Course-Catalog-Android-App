@@ -26,7 +26,7 @@ public class CourseableApplication extends Application {
   @Override
   public final void onCreate() {
     super.onCreate();
-    Log.i("Startup","CourseableApplication onCreate");
+    Log.i("Startup", "CourseableApplication onCreate");
 
     client = Client.start();
     new Thread(Server::start).start();

@@ -49,7 +49,7 @@ public final class MainActivity extends AppCompatActivity
   @Override
   protected void onCreate(final Bundle unused) {
     super.onCreate(unused);
-    Log.i("Startup","MainActivity onCreate");
+    Log.i("Startup", "MainActivity onCreate");
 
     // Bind to the layout in activity_main.xml
     binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
@@ -62,7 +62,7 @@ public final class MainActivity extends AppCompatActivity
 
     // Retrieve the API client from the application and initiate a course summary request
     CourseableApplication application = (CourseableApplication) getApplication();
-    Log.i("NetworkExample","MainActivity getSummary");
+    Log.i("NetworkExample", "MainActivity getSummary");
     application.getCourseClient().getSummary(DEFAULT_YEAR, DEFAULT_SEMESTER, this);
 
     // Register this component as a callback for changes to the search view component shown above
@@ -88,7 +88,7 @@ public final class MainActivity extends AppCompatActivity
   @Override
   public void summaryResponse(
       final String year, final String semester, final Summary[] setSummaries) {
-    Log.i("NetworkExample","MainActivity SummaryResponse" + setSummaries.length);
+    Log.i("NetworkExample", "MainActivity SummaryResponse" + setSummaries.length);
     courses = Arrays.asList(setSummaries);
     listAdapter.edit().replaceAll(courses).commit();
   }
