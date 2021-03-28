@@ -13,6 +13,8 @@ import edu.illinois.cs.cs125.spring2021.mp.application.CourseableApplication;
 import edu.illinois.cs.cs125.spring2021.mp.databinding.ActivityMainBinding;
 import edu.illinois.cs.cs125.spring2021.mp.models.Summary;
 import edu.illinois.cs.cs125.spring2021.mp.network.Client;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -132,6 +134,8 @@ public final class MainActivity extends AppCompatActivity
    */
   @Override
   public boolean onQueryTextChange(final String query) {
+    List<Summary> filteredList =  Summary.filter(courses, query);
+    listAdapter.edit().replaceAll(filteredList).commit();
     return true;
   }
 
@@ -143,5 +147,5 @@ public final class MainActivity extends AppCompatActivity
    * @param course the course that was clicked
    */
   @Override
-  public void onCourseClicked(final Summary course) {}
+  public void onCourseClicked(final Summary course) { }
 }

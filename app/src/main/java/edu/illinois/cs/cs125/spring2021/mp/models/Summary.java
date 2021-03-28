@@ -6,8 +6,6 @@ import androidx.annotation.NonNull;
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -153,7 +151,6 @@ public class Summary implements SortedListAdapter.ViewModel {
       String thisCourse = course.department + " " + course.number + ": " + course.title;
       if (thisCourse.toLowerCase().contains(text.toLowerCase())) {
         courseList.add(course);
-        Log.i("addcourse", thisCourse);
       }
     }
     return courseList;
