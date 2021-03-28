@@ -42,14 +42,14 @@ public final class Server extends Dispatcher {
   private final Map<String, String> summaries = new HashMap<>();
 
   private MockResponse getSummary(@NonNull final String path) {
-    Log.i("NetworkExample","Request for" + path);
+    Log.i("NetworkExample", "Request for" + path);
     String[] parts = path.split("/");
     if (parts.length != 2) {
       return new MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST);
     }
 
     String summary = summaries.get(parts[0] + "_" + parts[1]);
-    Log.i("NetworkExample","getSummary");
+    Log.i("NetworkExample", "getSummary");
     if (summary == null) {
       return new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND);
     }
@@ -64,7 +64,7 @@ public final class Server extends Dispatcher {
   public MockResponse dispatch(@NonNull final RecordedRequest request) {
     try {
       String path = request.getPath();
-      Log.i("NetworkExample","Request for" + path);
+      Log.i("NetworkExample", "Request for" + path);
       if (path == null || request.getMethod() == null) {
         return new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND);
       } else if (path.equals("/") && request.getMethod().equalsIgnoreCase("GET")) {

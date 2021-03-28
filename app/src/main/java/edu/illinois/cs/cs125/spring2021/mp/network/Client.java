@@ -21,7 +21,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.Executors;
 
-import static android.util.Log.*;
 
 /**
  * Course API client.
@@ -60,7 +59,7 @@ public final class Client {
       @NonNull final String semester,
       @NonNull final CourseClientCallbacks callbacks) {
     String url = CourseableApplication.SERVER_URL + "summary/" + year + "/" + semester;
-    Log.i("NetworkExample","Request summary from " + url);
+    Log.i("NetworkExample", "Request summary from " + url);
     StringRequest summaryRequest =
         new StringRequest(
             Request.Method.GET,
@@ -68,7 +67,7 @@ public final class Client {
             response -> {
               try {
                 Summary[] courses = objectMapper.readValue(response, Summary[].class);
-                Log.i("NetworkExample","getSummary returned" + courses.length + "courses");
+                Log.i("NetworkExample", "getSummary returned" + courses.length + "courses");
                 callbacks.summaryResponse(year, semester, courses);
               } catch (JsonProcessingException e) {
                 e.printStackTrace();

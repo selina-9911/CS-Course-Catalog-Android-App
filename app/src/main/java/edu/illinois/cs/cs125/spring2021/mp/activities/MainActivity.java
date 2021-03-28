@@ -14,7 +14,6 @@ import edu.illinois.cs.cs125.spring2021.mp.databinding.ActivityMainBinding;
 import edu.illinois.cs.cs125.spring2021.mp.models.Summary;
 import edu.illinois.cs.cs125.spring2021.mp.network.Client;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

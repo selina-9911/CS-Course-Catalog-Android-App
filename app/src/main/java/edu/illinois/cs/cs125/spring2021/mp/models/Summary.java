@@ -1,6 +1,5 @@
 package edu.illinois.cs.cs125.spring2021.mp.models;
 
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
