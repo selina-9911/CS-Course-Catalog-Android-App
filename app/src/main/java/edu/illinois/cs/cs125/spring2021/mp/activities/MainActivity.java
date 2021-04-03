@@ -61,9 +61,9 @@ public final class MainActivity extends AppCompatActivity
     binding.recyclerView.setAdapter(listAdapter);
 
     // Retrieve the API client from the application and initiate a course summary request
-    CourseableApplication application = (CourseableApplication) getApplication();
+    CourseableApplication application = (CourseableApplication) getApplication(); //create instance
     Log.i("NetworkExample", "MainActivity getSummary");
-    application.getCourseClient().getSummary(DEFAULT_YEAR, DEFAULT_SEMESTER, this);
+    application.getCourseClient().getSummary(DEFAULT_YEAR, DEFAULT_SEMESTER, this); // getcourseclient return a client, this client starts calling server
 
     // Register this component as a callback for changes to the search view component shown above
     // the course list
@@ -87,7 +87,7 @@ public final class MainActivity extends AppCompatActivity
    */
   @Override
   public void summaryResponse(
-      final String year, final String semester, final Summary[] setSummaries) {
+      final String year, final String semester, final Summary[] setSummaries) { //summary is the course model
     Log.i("NetworkExample", "MainActivity SummaryResponse" + setSummaries.length);
     courses = Arrays.asList(setSummaries);
     listAdapter.edit().replaceAll(courses).commit();

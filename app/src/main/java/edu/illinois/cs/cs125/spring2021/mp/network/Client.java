@@ -57,23 +57,23 @@ public final class Client {
       @NonNull final String year,
       @NonNull final String semester,
       @NonNull final CourseClientCallbacks callbacks) {
-    String url = CourseableApplication.SERVER_URL + "summary/" + year + "/" + semester;
+    String url = CourseableApplication.SERVER_URL + "summary/" + year + "/" + semester;  //server url
     Log.i("NetworkExample", "Request summary from " + url);
     StringRequest summaryRequest =
         new StringRequest(
             Request.Method.GET,
-            url,
+            url, //create a request and below is the response received
             response -> {
               try {
-                Summary[] courses = objectMapper.readValue(response, Summary[].class);
+                Summary[] courses = objectMapper.readValue(response, Summary[].class); //after getting response, json -> str[]
                 Log.i("NetworkExample", "getSummary returned" + courses.length + "courses");
-                callbacks.summaryResponse(year, semester, courses);
+                callbacks.summaryResponse(year, semester, courses); // take the deserialized courses list and return the course list. this is called in main activity
               } catch (JsonProcessingException e) {
                 e.printStackTrace();
               }
             },
             error -> Log.e(TAG, error.toString()));
-    requestQueue.add(summaryRequest);
+    requestQueue.add(summaryRequest); // make the request
   }
 
   private static Client instance;

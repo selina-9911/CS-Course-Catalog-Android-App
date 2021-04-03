@@ -40,19 +40,19 @@ public final class Server extends Dispatcher {
 
   private final Map<String, String> summaries = new HashMap<>();
 
-  private MockResponse getSummary(@NonNull final String path) {
+  private MockResponse getSummary(@NonNull final String path) { //continue from below; now get summary of year/semester
     Log.i("NetworkExample", "Request for" + path);
     String[] parts = path.split("/");
     if (parts.length != 2) {
       return new MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST);
     }
 
-    String summary = summaries.get(parts[0] + "_" + parts[1]);
+    String summary = summaries.get(parts[0] + "_" + parts[1]); //pull from the json file 2021_spring_summary.json
     Log.i("NetworkExample", "getSummary");
     if (summary == null) {
       return new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND);
     }
-    return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(summary);
+    return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(summary);  //returns the mock response json file -> client callback -> main activity lists all courses
   }
 
   @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
@@ -60,16 +60,16 @@ public final class Server extends Dispatcher {
 
   @NonNull
   @Override
-  public MockResponse dispatch(@NonNull final RecordedRequest request) {
+  public MockResponse dispatch(@NonNull final RecordedRequest request) {  //server receives the client request here
     try {
-      String path = request.getPath();
+      String path = request.getPath(); //get the path /summary/year/semester
       Log.i("NetworkExample", "Request for" + path);
       if (path == null || request.getMethod() == null) {
         return new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND);
       } else if (path.equals("/") && request.getMethod().equalsIgnoreCase("GET")) {
         return new MockResponse().setBody("CS125").setResponseCode(HttpURLConnection.HTTP_OK);
       } else if (path.startsWith("/summary/")) {
-        return getSummary(path.replaceFirst("/summary/", ""));
+        return getSummary(path.replaceFirst("/summary/", "")); //now get summary of year/semester
       }
       return new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND);
     } catch (Exception e) {

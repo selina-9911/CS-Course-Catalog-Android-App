@@ -134,7 +134,7 @@ public class Summary implements SortedListAdapter.ViewModel {
         String secondCompare =
             courseModel2.department + " " + courseModel2.number + courseModel2.title;
         return firstCompare.compareTo(secondCompare);
-      };
+      };  //when server exacts the json, it is ordered already. comparator defines the sorting for list<summary>
 
   /**
    * javadoc comment.
