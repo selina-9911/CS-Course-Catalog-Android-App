@@ -46,7 +46,7 @@ public final class Server extends Dispatcher {
     if (parts.length != 2) {
       return new MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST);
     }
-
+    //summaries.put(year + "_" + semester, json)
     String summary = summaries.get(parts[0] + "_" + parts[1]); //pull from the json file 2021_spring_summary.json
     Log.i("NetworkExample", "getSummary");
     if (summary == null) {
@@ -55,8 +55,25 @@ public final class Server extends Dispatcher {
     return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(summary);  //returns the mock response json file -> client callback -> main activity lists all courses
   }
 
+  private MockResponse getCourse(@NonNull final String path) {
+    //courses.put(Summary course, node.toPrettyString())
+    String[] parts = path.split("/");
+    if (parts.length != 4) {
+      return new MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST);
+    }
+    Summary theCourse = new Summary(parts[0], parts[1], parts[2], parts[3],null);
+    String course = courses.get(theCourse);
+    Log.i("NetworkExample", "getSummary");
+    if (course == null) {
+      return new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND);
+    }
+    return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(course);
+  }
+
   @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-  private final Map<Summary, String> courses = new HashMap<>();
+  private final Map<Summary, String> courses = new HashMap<>(); // create a map of summary object(a course) -> json file
+
+
 
   @NonNull
   @Override
@@ -70,6 +87,8 @@ public final class Server extends Dispatcher {
         return new MockResponse().setBody("CS125").setResponseCode(HttpURLConnection.HTTP_OK);
       } else if (path.startsWith("/summary/")) {
         return getSummary(path.replaceFirst("/summary/", "")); //now get summary of year/semester
+      } else if (path.startsWith("/course/")) {
+        return getCourse(path.replaceFirst("/course/", ""));
       }
       return new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND);
     } catch (Exception e) {
