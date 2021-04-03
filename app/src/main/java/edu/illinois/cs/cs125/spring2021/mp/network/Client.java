@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.illinois.cs.cs125.spring2021.mp.application.CourseableApplication;
+import edu.illinois.cs.cs125.spring2021.mp.models.Course;
 import edu.illinois.cs.cs125.spring2021.mp.models.Summary;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -44,6 +45,14 @@ public final class Client {
      * @param summaries an array of course summaries
      */
     default void summaryResponse(String year, String semester, Summary[] summaries) {}
+
+    /**
+     * Return ...
+     *
+     * @param summary ...
+     * @param course ...
+     */
+    default void courseResponse(Summary summary, Course course) {}
   }
 
   /**
@@ -75,6 +84,38 @@ public final class Client {
               }
             },
             error -> Log.e(TAG, error.toString()));
+    requestQueue.add(summaryRequest); // make the request
+  }
+
+  /**
+   * Retrieve course summaries for a given year and semester.
+   *
+   * @param summary ..
+   * @param callbacks ...
+   */
+  public void getCourse(
+          @NonNull final Summary summary,
+          @NonNull final CourseClientCallbacks callbacks) {
+    String url = CourseableApplication.SERVER_URL + "course/" + summary.getYear() + "/" + summary.getSemester();
+    //server url
+    Log.i("NetworkExample", "Request summary from " + url);
+    StringRequest summaryRequest =
+            new StringRequest(
+                    Request.Method.GET,
+                    url, //create a request and below is the response received
+                    response -> {
+                      try {
+                        Summary[] courses = objectMapper.readValue(response, Summary[].class);
+                        //after getting response, json -> str[]
+                        Log.i("NetworkExample", "getSummary returned" + courses.length + "courses");
+                        callbacks.courseResponse(null, null);
+                        // take the deserialized courses list and return the course list.
+                        // this is called in main activity
+                      } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                      }
+                    },
+                    error -> Log.e(TAG, error.toString()));
     requestQueue.add(summaryRequest); // make the request
   }
 

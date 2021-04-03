@@ -219,40 +219,40 @@ public final class MP2Test {
     }
    }
 
-//  @SuppressWarnings("SameParameterValue")
-//  @RunWith(AndroidJUnit4.class)
-//  @LooperMode(LooperMode.Mode.PAUSED)
-//  public static class IntegrationTests {
-//    @BeforeClass
-//    public static void setup() throws IOException {
-//      MP2Test.setup();
-//    }
-//
-//    /**
-//     * Test the client getCourse method
-//     */
-//    @Test(timeout = 20000L)
-//    @Graded(points = 15)
-//    public void testClientGetCourse()
-//        throws JsonProcessingException, InterruptedException, ExecutionException {
-//      Client client = Client.start();
-//
-//      for (String summaryString : summaries) {
-//        Summary summary = mapper.readValue(summaryString, Summary.class);
-//        CompletableFuture<Course> completableFuture = new CompletableFuture<>();
-//        client.getCourse(
-//            summary,
-//            new Client.CourseClientCallbacks() {
-//              @Override
-//              public void courseResponse(Summary summary, Course course) {
-//                completableFuture.complete(course);
-//              }
-//            });
-//        Course course = completableFuture.get();
-//        compareCourseToSerializedSummary(course, summaryString);
-//      }
-//    }
-//
+  @SuppressWarnings("SameParameterValue")
+  @RunWith(AndroidJUnit4.class)
+  @LooperMode(LooperMode.Mode.PAUSED)
+  public static class IntegrationTests {
+    @BeforeClass
+    public static void setup() throws IOException {
+      MP2Test.setup();
+    }
+
+    /**
+     * Test the client getCourse method
+     */
+    @Test(timeout = 20000L)
+    @Graded(points = 15)
+    public void testClientGetCourse()
+            throws JsonProcessingException, InterruptedException, ExecutionException {
+      Client client = Client.start();
+
+      for (String summaryString : summaries) {
+        Summary summary = mapper.readValue(summaryString, Summary.class);
+        CompletableFuture<Course> completableFuture = new CompletableFuture<>();
+        client.getCourse(
+                summary,
+                new Client.CourseClientCallbacks() {
+                  @Override
+                  public void courseResponse(Summary summary, Course course) {
+                    completableFuture.complete(course);
+                  }
+                });
+        Course course = completableFuture.get();
+        compareCourseToSerializedSummary(course, summaryString);
+      }
+    }
+
 //    /**
 //     * Test CourseActivity with intent.
 //     */
@@ -320,7 +320,7 @@ public final class MP2Test {
 //      };
 //    }
 //  }
-
+  }
   private static void compareCourseToSerializedCourse(Course course, String serializedCourse)
       throws JsonProcessingException {
     compareCourseToSerializedSummary(course, serializedCourse);
