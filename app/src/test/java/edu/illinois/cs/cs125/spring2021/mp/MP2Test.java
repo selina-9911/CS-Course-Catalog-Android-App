@@ -330,7 +330,7 @@ public final class MP2Test {
 
   private static void compareCourseToSerializedSummary(Course course, String serializedSummary)
       throws JsonProcessingException {
-    ObjectNode node = (ObjectNode) mapper.readTree(serializedSummary);
+    ObjectNode node = (ObjectNode) mapper.readTree(serializedSummary); //json - string
     assertThat(course.getYear()).isEqualTo(node.get("year").asText());
     assertThat(course.getSemester()).isEqualTo(node.get("semester").asText());
     assertThat(course.getDepartment()).isEqualTo(node.get("department").asText());
