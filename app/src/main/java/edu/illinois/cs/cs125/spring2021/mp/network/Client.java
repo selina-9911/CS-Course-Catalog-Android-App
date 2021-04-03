@@ -65,9 +65,11 @@ public final class Client {
             url, //create a request and below is the response received
             response -> {
               try {
-                Summary[] courses = objectMapper.readValue(response, Summary[].class); //after getting response, json -> str[]
+                Summary[] courses = objectMapper.readValue(response, Summary[].class);
+                //after getting response, json -> str[]
                 Log.i("NetworkExample", "getSummary returned" + courses.length + "courses");
-                callbacks.summaryResponse(year, semester, courses); // take the deserialized courses list and return the course list. this is called in main activity
+                callbacks.summaryResponse(year, semester, courses);
+                // take the deserialized courses list and return the course list. this is called in main activity
               } catch (JsonProcessingException e) {
                 e.printStackTrace();
               }

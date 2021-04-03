@@ -36,6 +36,7 @@ import okhttp3.mockwebserver.RecordedRequest;
  */
 public final class Server extends Dispatcher {
   @SuppressWarnings({"unused", "RedundantSuppression"})
+  private final int lengthOfPath = 4;
   private static final String TAG = Server.class.getSimpleName();
 
   private final Map<String, String> summaries = new HashMap<>();
@@ -52,16 +53,17 @@ public final class Server extends Dispatcher {
     if (summary == null) {
       return new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND);
     }
-    return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(summary);  //returns the mock response json file -> client callback -> main activity lists all courses
+    return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(summary);
+    //returns the mock response json file -> client callback -> main activity lists all courses
   }
 
   private MockResponse getCourse(@NonNull final String path) {
     //courses.put(Summary course, node.toPrettyString())
     String[] parts = path.split("/");
-    if (parts.length != 4) {
+    if (parts.length != lengthOfPath) {
       return new MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST);
     }
-    Summary theCourse = new Summary(parts[0], parts[1], parts[2], parts[3],null);
+    Summary theCourse = new Summary(parts[0], parts[1], parts[2], parts[3], null);
     String course = courses.get(theCourse);
     Log.i("NetworkExample", "getSummary");
     if (course == null) {
