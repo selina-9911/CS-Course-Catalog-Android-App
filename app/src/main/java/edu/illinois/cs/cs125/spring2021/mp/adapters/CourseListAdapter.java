@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 import edu.illinois.cs.cs125.spring2021.mp.adapters.viewholder.CourseViewHolder;
 import edu.illinois.cs.cs125.spring2021.mp.databinding.ItemCourseBinding;

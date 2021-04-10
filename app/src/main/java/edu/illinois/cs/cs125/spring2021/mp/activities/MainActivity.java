@@ -1,11 +1,16 @@
+//AndroidManifest.xml defines where all activities start. each activity is a screen
 package edu.illinois.cs.cs125.spring2021.mp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 import edu.illinois.cs.cs125.spring2021.mp.R;
 import edu.illinois.cs.cs125.spring2021.mp.adapters.CourseListAdapter;
@@ -145,6 +150,20 @@ public final class MainActivity extends AppCompatActivity
    *
    * @param course the course that was clicked
    */
+  //launching new activity/new screen to CourseActivity
   @Override
-  public void onCourseClicked(final Summary course) {}
+  public void onCourseClicked(final Summary course) {
+    Log.i(TAG, "on course clicked");
+    Intent courseIntent = new Intent(this, CourseActivity.class);
+    ObjectMapper objectMapper = new ObjectMapper();
+    String summaryAsString = null;
+    try {
+      summaryAsString = objectMapper.writeValueAsString(course);
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+    }
+
+    courseIntent.putExtra("COURSE", summaryAsString);
+    startActivity(courseIntent);
+  }
 }
