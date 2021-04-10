@@ -62,7 +62,7 @@ public final class Client {
    * @param semester the semester to retrieve
    * @param callbacks the callback that will receive the result
    */
-  public void getSummary(
+  public void getSummary( //mainactivity calls this function to get list of courses in home page via callback
       @NonNull final String year,
       @NonNull final String semester,
       @NonNull final CourseClientCallbacks callbacks) {
@@ -88,27 +88,27 @@ public final class Client {
   }
 
   /**
-   * Retrieve course summaries for a given year and semester.
+   * Retrieve course description for a course(Summary object)
    *
-   * @param summary ..
-   * @param callbacks ...
+   * @param summary the course that we are searching for the description
+   * @param callbacks returns the description
    */
   public void getCourse(
           @NonNull final Summary summary,
           @NonNull final CourseClientCallbacks callbacks) {
-    String url = CourseableApplication.SERVER_URL + "course/" + summary.getYear() + "/" + summary.getSemester();
+    String url = CourseableApplication.SERVER_URL + "course/" + summary.getYear() + "/" + summary.getSemester() + "/" + summary.getDepartment() + "/" + summary.getNumber();
     //server url
     Log.i("NetworkExample", "Request summary from " + url);
-    StringRequest summaryRequest =
+    StringRequest courseRequest =
             new StringRequest(
                     Request.Method.GET,
                     url, //create a request and below is the response received
                     response -> {
                       try {
-                        Summary[] courses = objectMapper.readValue(response, Summary[].class);
-                        //after getting response, json -> str[]
-                        Log.i("NetworkExample", "getSummary returned" + courses.length + "courses");
-                        callbacks.courseResponse(null, null);
+                        Course course = objectMapper.readValue(response, Course.class);
+                        //after getting response, json -> str
+                        Log.i("NetworkExample", "description returned");
+                        callbacks.courseResponse(summary, course);
                         // take the deserialized courses list and return the course list.
                         // this is called in main activity
                       } catch (JsonProcessingException e) {
@@ -116,7 +116,7 @@ public final class Client {
                       }
                     },
                     error -> Log.e(TAG, error.toString()));
-    requestQueue.add(summaryRequest); // make the request
+    requestQueue.add(courseRequest); // make the request
   }
 
   private static Client instance;

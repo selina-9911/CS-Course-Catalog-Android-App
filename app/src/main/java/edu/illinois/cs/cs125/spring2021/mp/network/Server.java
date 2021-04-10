@@ -65,7 +65,7 @@ public final class Server extends Dispatcher {
     }
     Summary theCourse = new Summary(parts[0], parts[1], parts[2], parts[3], null);
     String course = courses.get(theCourse);
-    Log.i("NetworkExample", "getSummary");
+    Log.i("NetworkExample", "getDescription");
     if (course == null) {
       return new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND);
     }
@@ -182,6 +182,7 @@ public final class Server extends Dispatcher {
 
   @SuppressWarnings("SameParameterValue")
   private void loadCourses(@NonNull final String year, @NonNull final String semester) {
+    // line 163 will create courses
     String filename = "/" + year + "_" + semester + ".json";
     String json =
         new Scanner(Server.class.getResourceAsStream(filename), "UTF-8").useDelimiter("\\A").next();
@@ -190,7 +191,7 @@ public final class Server extends Dispatcher {
       for (Iterator<JsonNode> it = nodes.elements(); it.hasNext(); ) {
         JsonNode node = it.next();
         Summary course = mapper.readValue(node.toString(), Summary.class);
-        courses.put(course, node.toPrettyString());
+        courses.put(course, node.toPrettyString()); // a dictionary of summary object : coursejson format
       }
     } catch (JsonProcessingException e) {
       throw new IllegalStateException(e);
