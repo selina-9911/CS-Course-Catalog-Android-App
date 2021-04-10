@@ -62,7 +62,7 @@ public final class Client {
    * @param semester the semester to retrieve
    * @param callbacks the callback that will receive the result
    */
-  public void getSummary( //mainactivity calls this function to get list of courses in home page via callback
+  public void getSummary(//mainactivity calls this function to get list of courses in home page via callback
       @NonNull final String year,
       @NonNull final String semester,
       @NonNull final CourseClientCallbacks callbacks) {
@@ -88,7 +88,7 @@ public final class Client {
   }
 
   /**
-   * Retrieve course description for a course(Summary object)
+   * Retrieve course description for a course(Summary object).
    *
    * @param summary the course that we are searching for the description
    * @param callbacks returns the description
@@ -96,7 +96,8 @@ public final class Client {
   public void getCourse(
           @NonNull final Summary summary,
           @NonNull final CourseClientCallbacks callbacks) {
-    String url = CourseableApplication.SERVER_URL + "course/" + summary.getYear() + "/" + summary.getSemester() + "/" + summary.getDepartment() + "/" + summary.getNumber();
+    String url = CourseableApplication.SERVER_URL + "course/" + summary.getYear() + "/"
+            + summary.getSemester() + "/" + summary.getDepartment() + "/" + summary.getNumber();
     //server url
     Log.i("NetworkExample", "Request summary from " + url);
     StringRequest courseRequest =
