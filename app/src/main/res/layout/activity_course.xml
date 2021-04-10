@@ -6,29 +6,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <TextView
+            android:id="@+id/title"
+            android:textSize="24sp"
+            android:text="hiiiii"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="wrap_content" />
 
-            <SearchView
-                android:id="@+id/search"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:iconifiedByDefault="false" />
-
-        </androidx.appcompat.widget.Toolbar>
-
-        <FrameLayout
+        <TextView
+            android:id="@+id/description"
+            android:textSize="24sp"
+            android:text="hiiiii"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </FrameLayout>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
