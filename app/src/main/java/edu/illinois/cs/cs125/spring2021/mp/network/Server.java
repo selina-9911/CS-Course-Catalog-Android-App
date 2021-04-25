@@ -6,6 +6,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import edu.illinois.cs.cs125.spring2021.mp.application.CourseableApplication;
 import edu.illinois.cs.cs125.spring2021.mp.models.Rating;
 import edu.illinois.cs.cs125.spring2021.mp.models.Summary;
@@ -81,6 +83,7 @@ public final class Server extends Dispatcher {
     path = path.replaceFirst("/rating/", "");
     String[] parts = path.split("[/?]");
     if (parts.length != 5) {
+      System.out.println("line 86");
       return new MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST);
     }
 
@@ -102,21 +105,41 @@ public final class Server extends Dispatcher {
       if (idRating.containsKey(uuid)) {
         Rating aRating = idRating.get(uuid);
         String ratingString = mapper.writeValueAsString(aRating);
+        System.out.println("return rating " + ratingString);
         return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(ratingString);//return the json file of rating
       } else {
-        Rating aRating = new Rating(uuid);
+        Rating aRating = new Rating(uuid, Rating.NOT_RATED);
         courseRatings.get(theCourse).put(uuid, aRating);
         String ratingString = mapper.writeValueAsString(aRating);
+        System.out.println("return no rating");
         return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(ratingString);
       }
+
+      //Post Request
     } else if (request.getMethod().equalsIgnoreCase("POST")) {
-      //theRating = request.getBody().readUtf8();
-      //redirect
-//      return new MockResponse().setResponseCode(HttpURLConnection.HTTP_MOVED_TEMP).setHeader(
-//              "Location", "/string/" //this should be url
-//      );
-      return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(""); //return in body
+      System.out.println("start post");
+      String ratingJson = request.getBody().readUtf8();
+      System.out.println(ratingJson);
+      try {
+        System.out.println("invalid?");
+        Rating theRating = mapper.readValue(ratingJson, Rating.class);
+        if (!theRating.getId().equals(uuid)) {
+          System.out.println(uuid);
+          return new MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST);
+        }
+        idRating.put(uuid, theRating);
+        System.out.println(theRating.getRating());
+        //redirect
+        return new MockResponse().setResponseCode(HttpURLConnection.HTTP_MOVED_TEMP).setHeader(
+                "Location", path.replaceFirst("2021/spring/CS/", "") //this should be url
+        );
+      } catch (Exception e) {
+        System.out.println(e);
+        return new MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST);
+      }
+      //return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(""); //return in body
     }
+    System.out.println("last line");
     return new MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST);
   }
 
@@ -144,7 +167,7 @@ public final class Server extends Dispatcher {
       } else if (path.startsWith("/course/")) {
         return getCourse(path.replaceFirst("/course/", ""));
       } else if (path.startsWith("/rating/")) {
-        System.out.println("can ratings pass?");
+        System.out.println("/rating/");
         return handleRating(request);
       }
       return new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND);

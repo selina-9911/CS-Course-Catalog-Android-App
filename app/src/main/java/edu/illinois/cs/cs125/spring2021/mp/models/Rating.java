@@ -5,10 +5,8 @@ public class Rating {
   private String id;
   private double rating;
 
-  public Rating(final String setID) {
-    id = setID;
-    rating = NOT_RATED;
-  }
+  public Rating() {};
+
   public Rating(String setID, double setRating) {
     id = setID;
     rating = setRating;
@@ -21,9 +19,6 @@ public class Rating {
 
   //return rating
   public double getRating() {
-    if (rating == 0) {
-      return NOT_RATED;
-    }
     return rating;
   }
 }

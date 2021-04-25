@@ -265,7 +265,7 @@ public final class MP3Test {
     /**
      * Test the POST rating server route.
      */
-    @Test(timeout = 20000L)
+    @Test(timeout = 80000L)
     @Graded(points = 15)
     public void testServerPostRating() throws IOException {
       Server.start();
