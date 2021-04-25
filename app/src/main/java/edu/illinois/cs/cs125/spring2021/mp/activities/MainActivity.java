@@ -66,6 +66,7 @@ public final class MainActivity extends AppCompatActivity
     binding.recyclerView.setAdapter(listAdapter);
 
     // Retrieve the API client from the application and initiate a course summary request
+    //this is in CourseableApplication.java in which application class and client are set up
     CourseableApplication application = (CourseableApplication) getApplication(); //create instance
     Log.i("NetworkExample", "MainActivity getSummary");
     application.getCourseClient().getSummary(DEFAULT_YEAR, DEFAULT_SEMESTER, this);

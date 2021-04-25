@@ -12,4 +12,5 @@ public class Course extends Summary {
   public String getDescription() {
     return description;
   }
+
 }

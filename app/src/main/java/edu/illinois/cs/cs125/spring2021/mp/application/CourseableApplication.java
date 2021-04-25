@@ -3,6 +3,9 @@ package edu.illinois.cs.cs125.spring2021.mp.application;
 import android.app.Application;
 import android.os.Build;
 import android.util.Log;
+
+import java.util.UUID;
+
 import edu.illinois.cs.cs125.spring2021.mp.network.Client;
 import edu.illinois.cs.cs125.spring2021.mp.network.Server;
 
@@ -13,6 +16,11 @@ import edu.illinois.cs.cs125.spring2021.mp.network.Server;
  *
  * <p>You should not need to modify this file.
  */
+
+/*
+ when you go to another activity page, information could be gone so a application class can
+ hold these information
+*/
 public class CourseableApplication extends Application {
   /** Course API server port. You can change this if needed. */
   public static final int DEFAULT_SERVER_PORT = 8989;
@@ -22,6 +30,10 @@ public class CourseableApplication extends Application {
 
   // Course API client created during application startup
   private Client client;
+
+  //in mainactivity when application creates the client with this UUID.
+  // but if you log out, it will change.
+  private String clientID = UUID.randomUUID().toString();
 
   @Override
   public final void onCreate() {
@@ -42,6 +54,7 @@ public class CourseableApplication extends Application {
    * @return the course API client instance.
    */
   public final Client getCourseClient() {
+    Log.i("clientid", clientID); // it will return the same id everytime during one session
     return client;
   }
 }

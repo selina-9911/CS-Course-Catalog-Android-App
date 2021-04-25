@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.illinois.cs.cs125.spring2021.mp.application.CourseableApplication;
+import edu.illinois.cs.cs125.spring2021.mp.models.Rating;
 import edu.illinois.cs.cs125.spring2021.mp.models.Summary;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -40,6 +41,7 @@ public final class Server extends Dispatcher {
   private static final String TAG = Server.class.getSimpleName();
 
   private final Map<String, String> summaries = new HashMap<>();
+  private final ObjectMapper mapper = new ObjectMapper();
 
   private MockResponse getSummary(@NonNull final String path) { //continue from below; now get summary of year/semester
     Log.i("NetworkExample", "Request for" + path);
@@ -72,8 +74,58 @@ public final class Server extends Dispatcher {
     return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(course);
   }
 
+
+
+  private MockResponse handleRating(@NonNull final RecordedRequest request) throws JsonProcessingException {
+    String path = request.getPath();
+    path = path.replaceFirst("/rating/", "");
+    String[] parts = path.split("[/?]");
+    if (parts.length != 5) {
+      return new MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST);
+    }
+
+    String uuid = parts[4].replaceFirst("client=", "");
+    Summary theCourse = new Summary(parts[0], parts[1], parts[2], parts[3], null);
+    Map<String, Rating> idRating = courseRatings.get(theCourse); // get the rating from ratings list[summary;[id;rating]]
+    System.out.println(theCourse.getNumber());
+
+    //the course is not valid
+    if (idRating == null) {
+      System.out.println("course not exist");
+      return new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND);
+    }
+
+    //Get request
+    if (request.getMethod().equalsIgnoreCase("GET")) {
+      Log.i("NetworkExample", "getRating");
+      System.out.println("this is the uuid " + uuid);
+      if (idRating.containsKey(uuid)) {
+        Rating aRating = idRating.get(uuid);
+        String ratingString = mapper.writeValueAsString(aRating);
+        return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(ratingString);//return the json file of rating
+      } else {
+        Rating aRating = new Rating(uuid);
+        courseRatings.get(theCourse).put(uuid, aRating);
+        String ratingString = mapper.writeValueAsString(aRating);
+        return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(ratingString);
+      }
+    } else if (request.getMethod().equalsIgnoreCase("POST")) {
+      //theRating = request.getBody().readUtf8();
+      //redirect
+//      return new MockResponse().setResponseCode(HttpURLConnection.HTTP_MOVED_TEMP).setHeader(
+//              "Location", "/string/" //this should be url
+//      );
+      return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(""); //return in body
+    }
+    return new MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST);
+  }
+
+
   @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
   private final Map<Summary, String> courses = new HashMap<>(); // create a map of summary object(a course) -> json file
+
+  private final Map<Summary, Map<String, Rating>> courseRatings = new HashMap<>(); //a map of summary -> new rating object
+
 
 
 
@@ -91,6 +143,9 @@ public final class Server extends Dispatcher {
         return getSummary(path.replaceFirst("/summary/", "")); //now get summary of year/semester
       } else if (path.startsWith("/course/")) {
         return getCourse(path.replaceFirst("/course/", ""));
+      } else if (path.startsWith("/rating/")) {
+        System.out.println("can ratings pass?");
+        return handleRating(request);
       }
       return new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND);
     } catch (Exception e) {
@@ -154,13 +209,13 @@ public final class Server extends Dispatcher {
     return false;
   }
 
-  private final ObjectMapper mapper = new ObjectMapper();
 
   private Server() {
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     loadSummary("2021", "spring");
     loadCourses("2021", "spring");
+    loadRatings("2021", "spring");
 
     try {
       MockWebServer server = new MockWebServer();
@@ -192,6 +247,24 @@ public final class Server extends Dispatcher {
         JsonNode node = it.next();
         Summary course = mapper.readValue(node.toString(), Summary.class);
         courses.put(course, node.toPrettyString()); // a dictionary of summary object : coursejson format
+      }
+    } catch (JsonProcessingException e) {
+      throw new IllegalStateException(e);
+    }
+  }
+
+  @SuppressWarnings("SameParameterValue")
+  private void loadRatings(@NonNull final String year, @NonNull final String semester) {
+    String filename = "/" + year + "_" + semester + ".json";
+    String json =
+            new Scanner(Server.class.getResourceAsStream(filename), "UTF-8").useDelimiter("\\A").next();
+    try {
+      JsonNode nodes = mapper.readTree(json);
+      for (Iterator<JsonNode> it = nodes.elements(); it.hasNext(); ) {
+        JsonNode node = it.next();
+        Summary course = mapper.readValue(node.toString(), Summary.class);
+        Map<String, Rating> idRatings = new HashMap<>();
+        courseRatings.put(course, idRatings); // a dictionary of summary object : coursejson format
       }
     } catch (JsonProcessingException e) {
       throw new IllegalStateException(e);

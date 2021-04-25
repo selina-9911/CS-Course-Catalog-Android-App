@@ -2,6 +2,8 @@ package edu.illinois.cs.cs125.spring2021.mp.network;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
+
+import com.android.volley.AuthFailureError;
 import com.android.volley.Cache;
 import com.android.volley.ExecutorDelivery;
 import com.android.volley.Network;
@@ -54,6 +56,8 @@ public final class Client {
      * @param course ...
      */
     default void courseResponse(Summary summary, Course course) {}
+
+    default void stringResponse(String string) {}
 
     default void yourRating(Summary summary, Rating rating) {}
   }
@@ -134,6 +138,40 @@ public final class Client {
                     },
                     error -> Log.e(TAG, error.toString()));
     requestQueue.add(courseRequest); // make the request
+  }
+
+  //similar to others
+  public void getString(@NonNull final CourseClientCallbacks callbacks) {
+    String url = CourseableApplication.SERVER_URL + "string/";  //server url
+    Log.i("NetworkExample", "Request summary from " + url);
+    StringRequest stringRequest =
+            new StringRequest(
+                    Request.Method.GET,
+                    url, //create a request and below is the response received
+                    response -> { callbacks.stringResponse(response.getBytes().toString());
+                    },
+                    error -> Log.e(TAG, error.toString()));
+    requestQueue.add(stringRequest); // make the request
+  }
+
+  //not just string but an object
+  public void postString(@NonNull final String string, @NonNull final CourseClientCallbacks callbacks) {
+    String url = CourseableApplication.SERVER_URL + "string/";  //server url
+    Log.i("NetworkExample", "Request summary from " + url);
+    StringRequest stringRequest =
+            new StringRequest(
+                    Request.Method.POST,
+                    url, //create a request and below is the response received
+                    response -> {
+                      callbacks.stringResponse(response.getBytes().toString());
+                    },
+                    error -> Log.e(TAG, error.toString())) {
+      @Override
+      public byte[] getBody() throws AuthFailureError {
+        return string.getBytes();
+      }
+    };
+    requestQueue.add(stringRequest); // make the request
   }
 
   private static Client instance;

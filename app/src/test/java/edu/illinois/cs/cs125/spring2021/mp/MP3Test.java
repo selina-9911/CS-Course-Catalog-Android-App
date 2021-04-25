@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import edu.illinois.cs.cs125.gradlegrader.annotations.Graded;
 import edu.illinois.cs.cs125.spring2021.mp.activities.CourseActivity;
 import edu.illinois.cs.cs125.spring2021.mp.application.CourseableApplication;
+import edu.illinois.cs.cs125.spring2021.mp.models.Course;
 import edu.illinois.cs.cs125.spring2021.mp.models.Rating;
 import edu.illinois.cs.cs125.spring2021.mp.models.Summary;
 import edu.illinois.cs.cs125.spring2021.mp.network.Client;
@@ -127,11 +128,13 @@ public final class MP3Test {
     }
   }
 
+
   public static class UnitTests {
     @BeforeClass
     public static void setup() throws IOException {
       MP3Test.setup();
     }
+
 
     /**
      * Test the GET rating server route.
@@ -153,7 +156,7 @@ public final class MP3Test {
       };
       for (String courseString : courses.subList(0, 8)) {
         for (String clientID : randomIDs) {
-          ObjectNode node = (ObjectNode) mapper.readTree(courseString);
+          ObjectNode node = (ObjectNode) mapper.readTree(courseString);//json
           String url =
               CourseableApplication.SERVER_URL
                   + "rating/"
@@ -214,6 +217,50 @@ public final class MP3Test {
       response = client.newCall(request).execute();
       assertThat(response.code()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
     }
+
+
+    //practice test
+//    @Test(timeout = 10000L)
+//    public void testPost() throws ExecutionException, InterruptedException {
+//      Server.start();
+//      assertThat(Server.isRunning(true)).isTrue();
+//
+//
+//      Client client = Client.start();
+//
+//      //get empty rating
+//      CompletableFuture<String> firstRequest = new CompletableFuture<>();
+//      client.getString(new Client.CourseClientCallbacks() {
+//        @Override
+//        public void stringResponse(String string) {
+//          firstRequest.complete(string); //wait for the complete is called back and get ite
+//        }
+//      });
+//
+//      assertThat(firstRequest.get().equals(""));
+//
+//      //post the rating
+//      CompletableFuture<String> secondRequest = new CompletableFuture<>();
+//      client.postString("chuchu", new Client.CourseClientCallbacks() {
+//        @Override
+//        public void stringResponse(String string) {
+//          secondRequest.complete(string); //wait for the complete is called back and get ite
+//        }
+//      });
+//
+//      assertThat(secondRequest.get().equals("chuchu"));
+//
+//      //confirm that the string is chuchu so do a second get request
+//      CompletableFuture<String> thirdRequest = new CompletableFuture<>();
+//      client.postString("chuchu", new Client.CourseClientCallbacks() {
+//        @Override
+//        public void stringResponse(String string) {
+//          thirdRequest.complete(string); //wait for the complete is called back and get ite
+//        }
+//      });
+//
+//      assertThat(thirdRequest.get().equals("chuchu"));
+//    }
 
     /**
      * Test the POST rating server route.
