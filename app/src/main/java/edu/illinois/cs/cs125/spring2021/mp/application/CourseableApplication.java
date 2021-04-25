@@ -9,6 +9,10 @@ import java.util.UUID;
 import edu.illinois.cs.cs125.spring2021.mp.network.Client;
 import edu.illinois.cs.cs125.spring2021.mp.network.Server;
 
+/*
+ when you go to another activity page, information could be gone so a application class can
+ hold these information
+*/
 /**
  * Application class for the Courseable app.
  *
@@ -17,10 +21,6 @@ import edu.illinois.cs.cs125.spring2021.mp.network.Server;
  * <p>You should not need to modify this file.
  */
 
-/*
- when you go to another activity page, information could be gone so a application class can
- hold these information
-*/
 public class CourseableApplication extends Application {
   /** Course API server port. You can change this if needed. */
   public static final int DEFAULT_SERVER_PORT = 8989;

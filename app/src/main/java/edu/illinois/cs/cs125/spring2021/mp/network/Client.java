@@ -56,18 +56,39 @@ public final class Client {
      * @param course ...
      */
     default void courseResponse(Summary summary, Course course) {}
-
+    /**
+     * Return ...
+     *
+     * @param string ...
+     */
     default void stringResponse(String string) {}
-
+    /**
+     * Return ...
+     *
+     * @param summary ...
+     * @param rating ...
+     */
     default void yourRating(Summary summary, Rating rating) {}
   }
-
+  /**
+   * Return ...
+   *
+   * @param summary ...
+   * @param clientID ...
+   * @param callbacks ...
+   */
   public void getRating(
                          @NonNull final Summary summary,
                          @NonNull final String clientID,
                          @NonNull final CourseClientCallbacks callbacks) {
   }
-
+  /**
+   * Return ...
+   *
+   * @param summary ...
+   * @param rating ...
+   * @param callbacks ...
+   */
   public void postRating(
           @NonNull final Summary summary,
           @NonNull final Rating rating,
@@ -141,6 +162,11 @@ public final class Client {
   }
 
   //similar to others
+  /**
+   * ...
+   *
+   * @param callbacks ..
+   */
   public void getString(@NonNull final CourseClientCallbacks callbacks) {
     String url = CourseableApplication.SERVER_URL + "string/";  //server url
     Log.i("NetworkExample", "Request summary from " + url);
@@ -148,13 +174,19 @@ public final class Client {
             new StringRequest(
                     Request.Method.GET,
                     url, //create a request and below is the response received
-                    response -> { callbacks.stringResponse(response.getBytes().toString());
+                    response -> {
+                      callbacks.stringResponse(response.getBytes().toString());
                     },
                     error -> Log.e(TAG, error.toString()));
     requestQueue.add(stringRequest); // make the request
   }
 
   //not just string but an object
+  /**
+   * ...
+   * @param string ...
+   * @param callbacks ..
+   */
   public void postString(@NonNull final String string, @NonNull final CourseClientCallbacks callbacks) {
     String url = CourseableApplication.SERVER_URL + "string/";  //server url
     Log.i("NetworkExample", "Request summary from " + url);
@@ -166,11 +198,11 @@ public final class Client {
                       callbacks.stringResponse(response.getBytes().toString());
                     },
                     error -> Log.e(TAG, error.toString())) {
-      @Override
-      public byte[] getBody() throws AuthFailureError {
-        return string.getBytes();
-      }
-    };
+          @Override
+          public byte[] getBody() throws AuthFailureError {
+            return string.getBytes();
+          }
+        };
     requestQueue.add(stringRequest); // make the request
   }
 

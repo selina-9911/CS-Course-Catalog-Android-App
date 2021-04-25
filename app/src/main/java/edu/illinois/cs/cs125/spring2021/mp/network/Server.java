@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import edu.illinois.cs.cs125.spring2021.mp.application.CourseableApplication;
 import edu.illinois.cs.cs125.spring2021.mp.models.Rating;
@@ -76,20 +75,22 @@ public final class Server extends Dispatcher {
     return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(course);
   }
 
-
+  private final int five = 5;
+  private final int four = 4;
 
   private MockResponse handleRating(@NonNull final RecordedRequest request) throws JsonProcessingException {
     String path = request.getPath();
     path = path.replaceFirst("/rating/", "");
     String[] parts = path.split("[/?]");
-    if (parts.length != 5) {
+    if (parts.length != five) {
       System.out.println("line 86");
       return new MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST);
     }
 
-    String uuid = parts[4].replaceFirst("client=", "");
+    String uuid = parts[four].replaceFirst("client=", "");
     Summary theCourse = new Summary(parts[0], parts[1], parts[2], parts[3], null);
-    Map<String, Rating> idRating = courseRatings.get(theCourse); // get the rating from ratings list[summary;[id;rating]]
+    Map<String, Rating> idRating = courseRatings.get(theCourse);
+    // get the rating from ratings list[summary;[id;rating]]
     System.out.println(theCourse.getNumber());
 
     //the course is not valid
@@ -106,7 +107,8 @@ public final class Server extends Dispatcher {
         Rating aRating = idRating.get(uuid);
         String ratingString = mapper.writeValueAsString(aRating);
         System.out.println("return rating " + ratingString);
-        return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(ratingString);//return the json file of rating
+        return new MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(ratingString);
+        //return the json file of rating
       } else {
         Rating aRating = new Rating(uuid, Rating.NOT_RATED);
         courseRatings.get(theCourse).put(uuid, aRating);
@@ -147,7 +149,8 @@ public final class Server extends Dispatcher {
   @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
   private final Map<Summary, String> courses = new HashMap<>(); // create a map of summary object(a course) -> json file
 
-  private final Map<Summary, Map<String, Rating>> courseRatings = new HashMap<>(); //a map of summary -> new rating object
+  private final Map<Summary, Map<String, Rating>> courseRatings = new HashMap<>();
+  //a map of summary -> new rating object
 
 
 
