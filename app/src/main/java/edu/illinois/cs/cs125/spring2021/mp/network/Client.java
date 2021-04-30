@@ -81,7 +81,28 @@ public final class Client {
                          @NonNull final Summary summary,
                          @NonNull final String clientID,
                          @NonNull final CourseClientCallbacks callbacks) {
+    String url = CourseableApplication.SERVER_URL + "rating/" + summary.getYear() + "/" + summary.getSemester() + "/"
+            + summary.getDepartment() + "/" + summary.getNumber() + "?client=" + clientID;  //server url
+    StringRequest stringRequest =
+            new StringRequest(
+                    Request.Method.GET,
+                    url, //create a request and below is the response received
+                    response -> {
+                      try {
+                        Rating rating = objectMapper.readValue(response, Rating.class);
+                        //the response from server is string version of rating object. now -> rating object
+                        Log.i("NetworkExample", "getRating returned" + "with rating =" + rating.getRating());
+                        callbacks.yourRating(summary, rating);
+                        // take the deserialized rating and return the rating. this is called in courseactivity
+                      } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                      }
+                    },
+                    error -> Log.e(TAG, error.toString()));
+    requestQueue.add(stringRequest); // make the request
   }
+
+
   /**
    * Return ...
    *
@@ -95,7 +116,30 @@ public final class Client {
           @NonNull final CourseClientCallbacks callbacks) {
   }
 
-
+  //not just string but an object
+  /**
+   * ...
+   * @param string ...
+   * @param callbacks ..
+   */
+  public void postString(@NonNull final String string, @NonNull final CourseClientCallbacks callbacks) {
+    String url = CourseableApplication.SERVER_URL + "string/";  //server url
+    Log.i("NetworkExample", "Request summary from " + url);
+    StringRequest stringRequest =
+            new StringRequest(
+                    Request.Method.POST,
+                    url, //create a request and below is the response received
+                    response -> {
+                      callbacks.stringResponse(response.getBytes().toString());
+                    },
+                    error -> Log.e(TAG, error.toString())) {
+              @Override
+              public byte[] getBody() throws AuthFailureError {
+                return string.getBytes();
+              }
+            };
+    requestQueue.add(stringRequest); // make the request
+  }
   /**
    * Retrieve course summaries for a given year and semester.
    *
@@ -161,50 +205,8 @@ public final class Client {
     requestQueue.add(courseRequest); // make the request
   }
 
-  //similar to others
-  /**
-   * ...
-   *
-   * @param callbacks ..
-   */
-  public void getString(@NonNull final CourseClientCallbacks callbacks) {
-    String url = CourseableApplication.SERVER_URL + "string/";  //server url
-    Log.i("NetworkExample", "Request summary from " + url);
-    StringRequest stringRequest =
-            new StringRequest(
-                    Request.Method.GET,
-                    url, //create a request and below is the response received
-                    response -> {
-                      callbacks.stringResponse(response.getBytes().toString());
-                    },
-                    error -> Log.e(TAG, error.toString()));
-    requestQueue.add(stringRequest); // make the request
-  }
 
-  //not just string but an object
-  /**
-   * ...
-   * @param string ...
-   * @param callbacks ..
-   */
-  public void postString(@NonNull final String string, @NonNull final CourseClientCallbacks callbacks) {
-    String url = CourseableApplication.SERVER_URL + "string/";  //server url
-    Log.i("NetworkExample", "Request summary from " + url);
-    StringRequest stringRequest =
-            new StringRequest(
-                    Request.Method.POST,
-                    url, //create a request and below is the response received
-                    response -> {
-                      callbacks.stringResponse(response.getBytes().toString());
-                    },
-                    error -> Log.e(TAG, error.toString())) {
-          @Override
-          public byte[] getBody() throws AuthFailureError {
-            return string.getBytes();
-          }
-        };
-    requestQueue.add(stringRequest); // make the request
-  }
+
 
   private static Client instance;
 
