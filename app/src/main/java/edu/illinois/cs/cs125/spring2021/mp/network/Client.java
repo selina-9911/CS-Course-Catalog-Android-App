@@ -33,6 +33,7 @@ import java.util.concurrent.Executors;
 public final class Client {
   private static final String TAG = Client.class.getSimpleName();
   private static final int INITIAL_CONNECTION_RETRY_DELAY = 1000;
+  private final ObjectMapper mapper = new ObjectMapper();
 
   /**
    * Course API client callback interface.
@@ -113,33 +114,59 @@ public final class Client {
   public void postRating(
           @NonNull final Summary summary,
           @NonNull final Rating rating,
-          @NonNull final CourseClientCallbacks callbacks) {
-  }
-
-  //not just string but an object
-  /**
-   * ...
-   * @param string ...
-   * @param callbacks ..
-   */
-  public void postString(@NonNull final String string, @NonNull final CourseClientCallbacks callbacks) {
-    String url = CourseableApplication.SERVER_URL + "string/";  //server url
-    Log.i("NetworkExample", "Request summary from " + url);
+          @NonNull final CourseClientCallbacks callbacks) throws JsonProcessingException {
+    String url = CourseableApplication.SERVER_URL + "rating/" + summary.getYear() + "/" + summary.getSemester() + "/"
+            + summary.getDepartment() + "/" + summary.getNumber() + "?client=" + rating.getId();  //server url
+    String ratingString = mapper.writeValueAsString(rating);
     StringRequest stringRequest =
             new StringRequest(
                     Request.Method.POST,
                     url, //create a request and below is the response received
                     response -> {
-                      callbacks.stringResponse(response.getBytes().toString());
+                      try {
+                        Rating postedRating = objectMapper.readValue(response, Rating.class);
+                        //the response from server is string version of rating object. now -> rating object
+                        Log.i("NetworkExample", "getRating returned" + "with rating =" + postedRating.getRating());
+                        callbacks.yourRating(summary, postedRating);
+                        // take the deserialized rating and return the rating. this is called in courseactivity
+                      } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                      }
                     },
                     error -> Log.e(TAG, error.toString())) {
-              @Override
-              public byte[] getBody() throws AuthFailureError {
-                return string.getBytes();
-              }
-            };
+      @Override
+      public byte[] getBody() throws AuthFailureError {
+        return ratingString.getBytes();
+      }
+    };
     requestQueue.add(stringRequest); // make the request
   }
+
+
+//  //not just string but an object
+//  /**
+//   * ...
+//   * @param string ...
+//   * @param callbacks ..
+//   */
+//  public void postString(@NonNull final String string, @NonNull final CourseClientCallbacks callbacks) {
+//    String url = CourseableApplication.SERVER_URL + "string/";  //server url
+//    Log.i("NetworkExample", "Request summary from " + url);
+//    StringRequest stringRequest =
+//            new StringRequest(
+//                    Request.Method.POST,
+//                    url, //create a request and below is the response received
+//                    response -> {
+//                      callbacks.stringResponse(response.getBytes().toString());
+//                    },
+//                    error -> Log.e(TAG, error.toString())) {
+//              @Override
+//              public byte[] getBody() throws AuthFailureError {
+//                return string.getBytes();
+//              }
+//            };
+//    requestQueue.add(stringRequest); // make the request
+//  }
   /**
    * Retrieve course summaries for a given year and semester.
    *

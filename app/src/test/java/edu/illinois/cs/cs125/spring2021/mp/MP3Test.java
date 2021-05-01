@@ -467,7 +467,7 @@ public final class MP3Test {
     /**
      * Test the client getRating method
      */
-    @Test(timeout = 10000L)
+    @Test(timeout = 100000L)
     @Graded(points = 15)
     public void testClientPostRating()
         throws JsonProcessingException, InterruptedException, ExecutionException {
