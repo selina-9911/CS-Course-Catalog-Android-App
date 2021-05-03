@@ -57,4 +57,13 @@ public class CourseableApplication extends Application {
     Log.i("clientid", clientID); // it will return the same id everytime during one session
     return client;
   }
+  /**
+   * Retrieve the clientid.
+   *
+   * @return the clientid.
+   */
+  public final String getClientID() {
+    Log.i("clientid", clientID); // it will return the same id everytime during one session
+    return clientID;
+  }
 }

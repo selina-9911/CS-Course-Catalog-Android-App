@@ -19,10 +19,15 @@
             android:text="hiiiii"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
         <RatingBar
             android:id="@+id/rating"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:isIndicator="false"
+            android:rating="0.0"
+            android:numStars="5"
+            android:stepSize="0.5" />
 
     </LinearLayout>
 

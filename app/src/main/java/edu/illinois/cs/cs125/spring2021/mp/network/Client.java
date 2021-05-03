@@ -134,11 +134,11 @@ public final class Client {
                       }
                     },
                     error -> Log.e(TAG, error.toString())) {
-      @Override
-      public byte[] getBody() throws AuthFailureError {
-        return ratingString.getBytes();
-      }
-    };
+          @Override
+          public byte[] getBody() throws AuthFailureError {
+            return ratingString.getBytes();
+          }
+        };
     requestQueue.add(stringRequest); // make the request
   }
 
